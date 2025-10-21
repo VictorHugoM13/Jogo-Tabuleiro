@@ -1,35 +1,48 @@
-function urlBuilder(number) {       // Declara uma função chamada urlBuilder, que deve gerar o caminho (URL) da imagem da carta
-}                                   // Por enquanto está vazia — será completada depois para retornar algo como "images/heros/card01.jpeg"
-
-
-// --- Instâncias principais do jogo ---
-let card = new CardManager(urlBuilder);     // Cria um gerenciador de cartas, passando a função urlBuilder como "fábrica" de URLs
-let board = new BoardManager("board", 50, card);  // Cria o gerenciador do tabuleiro, dizendo que o id é "board", existem 50 imagens e o gerenciador de cartas é o 'card'
-
-
-// --- Pega elementos do HTML ---
-let menu = document.getElementById("menu");       // Pega a <div id="menu">, que contém o menu inicial
-let select = document.getElementById("numCards"); // Pega o <select> onde o jogador escolhe o número de cartas
-let start = document.getElementById("start");     // Pega o botão “start” (iniciar jogo)
-
-
-// --- Preenche o <select> com opções de tamanho ---
-for (let i = 4; i <= 10; i += 2) {    // Loop: i começa em 4 e vai até 10, pulando de 2 em 2 (4, 6, 8, 10)
-    let n = i ** 2;                   // Eleva i ao quadrado — ex: 4²=16, 6²=36 — simulando tabuleiros 4x4, 6x6 etc.
-    let op = document.createElement('option'); // Cria um elemento <option> dinamicamente
-    op.value = n;                     // Define o valor interno da opção como o número calculado
-    op.innerHTML = n;                 // Mostra o mesmo número como texto visível
-    select.appendChild(op);           // Adiciona essa opção dentro do <select> no HTML
+// Função que cria a URL da imagem de um card a partir de um número
+function urlBuilder(number) {
+    // Converte o número para string
+    number += "";
+    // Garante que a string tenha pelo menos 2 caracteres, adicionando '0' à esquerda se necessário
+    number = number.padStart(2, 0);
+    // Retorna o caminho da imagem do card no formato 'images/heros/cardXX.jpeg'
+    return `images/heros/card${number}.jpeg`;
 }
 
+// Cria uma instância do CardManager, usando a função urlBuilder para obter as imagens
+let card = new CardManager(urlBuilder);
 
-// --- Evento do botão START ---
-start.addEventListener('click', ()=>{         // Quando o botão "start" for clicado...
-    menu.classList.add('hidden');             // Esconde o menu inicial adicionando a classe CSS "hidden"
-    board.node.classList.remove('hidden');    // Mostra o tabuleiro, removendo a classe "hidden"
-    board.fill(select.value);                 // Preenche o tabuleiro com a quantidade de cartas escolhida no <select>
+// Cria uma instância do BoardManager, passando o id do elemento, tamanho do board e o CardManager
+let board = new BoardManager("board", 50, card);
+
+// Seleciona elementos do DOM para interagir com o menu e o jogo
+let menu = document.getElementById("menu");       // Menu inicial
+let select = document.getElementById("numCards"); // Dropdown de quantidade de cards
+let start = document.getElementById("start");     // Botão para iniciar o jogo
+
+// Preenche o select com opções de quantidade de cards
+for (let i = 4; i <= 10; i += 2) {    
+    let n = i ** 2;                    // Calcula o número de cards (i ao quadrado)
+    let op = document.createElement('option'); // Cria um elemento <option>
+    op.value = n;                      // Define o valor do option
+    op.innerHTML = n;                  // Define o texto que será mostrado
+    select.appendChild(op);            // Adiciona a opção ao select
+}
+
+// Adiciona evento ao botão de start
+start.addEventListener('click', ()=>{
+    menu.classList.add('hidden');        // Esconde o menu
+    board.node.classList.remove('hidden'); // Mostra o tabuleiro
+    board.fill(select.value);            // Preenche o tabuleiro com a quantidade de cards selecionada
 });
 
+// Adiciona evento ao tabuleiro
+board.node.addEventListener('click', ()=>{
+    if (board.check()){                  // Verifica se o jogo foi completado
+        setTimeout(()=>{
+            menu.classList.remove('hidden'); // Mostra o menu novamente
+            board.node.classList.add('hidden'); // Esconde o tabuleiro
+        }, 2000);                        // Aguarda 2 segundos antes de voltar ao menu
+    }
+});
 
-// --- Inicia automaticamente o jogo (sem precisar clicar) ---
-start.click();                                // Simula um clique automático no botão "start" assim que o script carrega
+start.click();  

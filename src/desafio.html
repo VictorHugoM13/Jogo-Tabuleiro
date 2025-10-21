@@ -1,38 +1,30 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Explorando Flexbox</title>
-    <style>
-        html, body {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-
-        body {
-            display: flex;
-            /* Outras propriedades para testar virão aqui */
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
+<style>
+    html, body{
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    body{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    button {
+        margin: 10px;
+        padding: 10px;
+    }
+</style>
 <body>
-    <!-- Os botões serão inseridos aqui via JavaScript -->
-
     <script>
-        // Etapa 3: Criar e adicionar 10 botões dinamicamente
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 10; i++){
             let btn = document.createElement('button');
             btn.textContent = `Botão ${i}`;
             document.body.appendChild(btn);
